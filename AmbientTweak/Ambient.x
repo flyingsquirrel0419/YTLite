@@ -46,6 +46,17 @@ static NSBundle *AmbBundle() {
 @property (nonatomic, weak, readwrite) id playerViewDelegate;
 @end
 
+@class YTLAmbientView;
+
+// Associated-object accessors for the ambient view (avoids %property/@interface clash)
+static const void *kYTLAmbViewKey = &kYTLAmbViewKey;
+static YTLAmbientView *ytlAmb_getView(UIView *pv) {
+    return objc_getAssociatedObject(pv, kYTLAmbViewKey);
+}
+static void ytlAmb_setView(UIView *pv, YTLAmbientView *v) {
+    objc_setAssociatedObject(pv, kYTLAmbViewKey, v, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 @interface YTPlayerViewController : UIViewController
 - (void)play;
 - (void)pause;
@@ -258,8 +269,6 @@ static CGFloat ytlAmb_strengthScale() {
 
 %hook YTPlayerView
 
-%property (nonatomic, strong) YTLAmbientView *ytlAmb_view;
-
 - (void)didMoveToWindow {
     %orig;
 
@@ -278,13 +287,14 @@ static CGFloat ytlAmb_strengthScale() {
         }
     }
 
-    if (self.window && enabled && engine == 2 && !self.ytlAmb_view) {
+    YTLAmbientView *existing = ytlAmb_getView(self);
+    if (self.window && enabled && engine == 2 && !existing) {
         YTLAmbientView *av = [[YTLAmbientView alloc] initWithPlayerView:self];
         [self insertSubview:av atIndex:0];
-        self.ytlAmb_view = av;
-    } else if ((!self.window || !enabled || engine != 2) && self.ytlAmb_view) {
-        [self.ytlAmb_view ytlAmb_detach];
-        self.ytlAmb_view = nil;
+        ytlAmb_setView(self, av);
+    } else if ((!self.window || !enabled || engine != 2) && existing) {
+        [existing ytlAmb_detach];
+        ytlAmb_setView(self, nil);
     }
 }
 
@@ -306,8 +316,8 @@ static CGFloat ytlAmb_strengthScale() {
 %new
 - (void)ytlAmb_setPlaying:(BOOL)playing {
     if ([self.view isKindOfClass:%c(YTPlayerView)]) {
-        YTPlayerView *pv = (YTPlayerView *)self.view;
-        pv.ytlAmb_view.playing = playing;
+        YTLAmbientView *av = ytlAmb_getView(self.view);
+        av.playing = playing;
     }
 }
 
