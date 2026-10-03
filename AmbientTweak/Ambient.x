@@ -60,6 +60,7 @@ static void ytlAmb_setView(UIView *pv, YTLAmbientView *v) {
 @interface YTPlayerViewController : UIViewController
 - (void)play;
 - (void)pause;
+- (void)ytlAmb_setPlaying:(BOOL)playing; // added via %new below
 @end
 
 @interface YTSettingsCell : UITableViewCell
