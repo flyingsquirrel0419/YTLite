@@ -1,0 +1,11 @@
+/* YTLiteAmbient — en */
+"Player.Ambient" = "Ambient mode";
+"Player.Ambient.Desc" = "Video-colored glow around the player";
+"Player.Ambient.Off" = "Off";
+"Player.Ambient.Soft" = "Soft";
+"Player.Ambient.Medium" = "Medium";
+"Player.Ambient.Maximum" = "Maximum";
+"Player.Ambient.Engine" = "Engine";
+"Player.Ambient.Engine.Native" = "Native (recommended)";
+"Player.Ambient.Engine.Mosaic" = "Mosaic (DRM-safe)";
+"Player.Ambient.Engine.Capture" = "Capture (experimental)";

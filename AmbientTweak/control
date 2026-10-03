@@ -1,0 +1,9 @@
+Package: com.dvntm.ytlite.ambient
+Name: YTLiteAmbient
+Depends: mobilesubstrate
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Ambient light glow for YouTube (YTLite companion tweak)
+Maintainer: flyingsquirrel0419
+Author: flyingsquirrel0419
+Section: Tweaks
